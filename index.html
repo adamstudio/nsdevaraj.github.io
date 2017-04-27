@@ -1,82 +1,92 @@
-<html>
-
-  <head>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-
-  </head>
-	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<html><head> 
+  <title>Clock</title>   
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">  
+   <link rel="stylesheet" type="text/css" href="bkup/worldclock.css">  
+   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({
     google_ad_client: "ca-pub-5940863911183002",
     enable_page_level_ads: true
   });
 </script>
-<body>
-	<h2>File Uploader utility</h2>
- <script>
-
-            function validate(url) {
-               var urlregex = /^((ftp|https?)\:\/\/)?[\w-]+(\.[\w-]+)+\.?(\:\d+)?(\/\S*)?$/gi;
-               return url.match(urlregex);
-            } 
-
-            function success() {
-                document.getElementsByTagName("form")[0].innerHTML = "<p class='success'>Your file was successfully uploaded. Would you like to <a href='.'>upload another file</a>?</p>";
-            }
-
-
-            function showError(msg, url, where) {
-                document.getElementsByTagName("form")[0].innerHTML = "<p class='success'>We were unable to upload the file. Please send the following error message to nsdevaraj@gmail.com for support.<br><br><em>"
-                + msg + " " + where + " " + url + "</em><br><br>Would you like to <a href='.'>try again</a>?</p>";
-            } 
-
-            function save() {
-                var url     = document.getElementById("url").value;
-                var where   = document.getElementById("service").value;
-                if (validate(url)) { 
-                    filepicker.setKey("AAiKmFlPTQIGqLCEQu5cQz");
-                    filepicker.exportFile(url, {
-                        service: where
-                    }, function(FPFile) {
-                        success();
-                    }, function(FPError) {
-                        showError(FPError.message, url, where);
-                    });
-                } else {
-                    alert("Please enter a valid URL starting with http://");
-                }
-            }
-        </script>
-
-		<script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
-
-
-        <form class="form-horizontal well"> 
-			<div class="control-group">
-                <label class="control-label-new" for="inputURL"> Enter file url</label>
-                <div class="controls2">
-                    <input type="text" id="url" placeholder="e.g., https://avatars3.githubusercontent.com/u/274062?v=3&s=460" class="input-xlarge" autocorrect="off" spellcheck="false" required="" pattern="https?://.+">
-                </div>
-            </div>
-               <div class="control-group ">
-                <label class="control-label-new" for="inputURL">Select Destination</label>
-                    <div class="controls2 send">
-                        <select name="service" id="service" style="width:90%" required="">
-                          <option value="DROPBOX">Dropbox</option>
-                          <option value="GOOGLE_DRIVE">Google Drive</option>
-                          <option value="SKYDRIVE">Microsoft OneDrive</option>
-                          <option value="BOX">Box.net</option>
-                          <option value="EVERNOTE">Evernote</option>
-                          <option value="FTP">FTP Server</option>
-                        </select>
-                    </div>
-                </div>
-
-            <div class="control-group">
-                    <a href="#" onclick="save();return false;" class="btn btn-inverse"><i class="icon-white icon-upload"></i> Upload File</a> 
-            </div>
-
-        </form>  
-</body>
-</html>           
+</head>
+<body> <div class="span-10 right last" style="text-align:right;">
+  <form method="post" action="#" class="inline" id="newcity_form">
+      <input id="newcity" style="text-align:left;" name="newcity" type="text" class="title hint ui-autocomplete-input" title="city, country or time zone" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+      <button type="submit" id="addcity" value="Submit" class="groovybutton">Add</button>
+      <input type="hidden" id="newcityid">
+  </form></div>
+  <div class="container">  
+    <div id="content" class="span-18 prepend-top"> 
+<!-- city template -->
+<script type="text/html" id="cityitem_templ">
+  <ul class="list append-3 prepend-3 span-12 last">
+   <% for ( var i = 0; i < cities.length; i++ ) { var city = cities[i]; %>        
+   <li class="ui-corner-all prepend-top span-12 <%=city.day_night_class%>" city="<%=city.id%>">
+      <div class="span-6 prepend-1">
+        <div><span class="cityname"><%=city.name%></span> 
+        </div>            
+      </div>
+      <div class="span-5 last">
+        <div>
+          <span class="time"><%=city.time_text%></span>
+          <span class="timezone" title="Observing Daylight Saving Time"><%=city.timezone_text%> <%= city.isDST ? '*' : ''%>
+          </span>
+        </div>                
+        <div>
+          <span class="date" ><%=city.date_text%></span>                
+        </div>
+      </div>
+      <span class="remove hide">X</span>
+   </li>
+   <% } %></ul>
+</script> <!-- end of city template -->
+<script type="text/html" id="citytiles_templ">
+<ul class="tiles span-16 append-1 prepend-1 last">
+<% for ( var i = 0; i < cities.length; i++ ) { var city = cities[i]; %>        
+  <li class="ui-corner-all ui-state-active prepend-top span-5 <%=city.day_night_class%>" city="<%=city.id%>">
+    <div class="cityname"><%=city.name%></div>
+    <div>
+      <span class="time"><%=city.time_text%></span>
+      <span class="timezone" title="Observing Daylight Saving Time"><%=city.timezone_text%> <%= city.isDST ? '*' : ''%>
+    </div>
+    <div><span class="date" ><%=city.date_text%></span></div>
+    <span class="remove hide">X</span>
+  </li>
+  <% } %></ul>
+</script>
        
+<div id="city_list">  
+  </div>
+<div id="slider_block" class="prepend-3 append-2 span-13 last append-bottom" style="position:relative;height:40px;">
+	<p title="Local Time" style="position: absolute; left: 93px;" class="triangle-isosceles" id="localtime">04:10 PM</p>
+	<div id="slider" class="span-12 last ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" style="position:absolute;top:25px;"><a href="#" class="ui-slider-handle ui-state-default ui-corner-all" style="left: 0%;"></a></div>
+</div>     
+   <script type="text/javascript" src="bkup/worldclock.js"></script> 
+  
+  
+<script>
+$(document).ready(function() {
+  KBJS.WTP.app.init();
+	
+	var version = '8.5';
+  if (version !== KBJS.WTP.options.version){
+    $('#features').show();
+    KBJS.WTP.options.version = version;
+    KBJS.WTP.options.save();
+  }
+	var svcParams = [];
+	svcParams.push("is24Hr=");
+	svcParams.push(KBJS.WTP.options.is24Hr);
+	svcParams.push("&layout=");
+	svcParams.push(KBJS.WTP.options.layout);
+	svcParams.push("&timeFormat=");
+	svcParams.push(KBJS.WTP.options.timeFormat);
+	svcParams.push("&dateFormat=");
+	svcParams.push(KBJS.WTP.options.dateFormat);
+    
+});</script> 
+
+   
+  
+</body></html>
